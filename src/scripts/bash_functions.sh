@@ -355,29 +355,27 @@ load_web_password_secret() {
 }
 
 setup_web_password() {
-    if [ -z "${WEBPASSWORD+x}" ] ; then
-        # ENV WEBPASSWORD is not set
+    if [ -z "${WEBPASSWORD_OVERRIDE+x}" ] ; then
+        # ENV WEBPASSWORD_OVERRIDE is not set
 
         # Exit if setupvars already has a password
         setup_var_exists "WEBPASSWORD" && return
-
         # Generate new random password
         WEBPASSWORD=$(tr -dc _A-Z-a-z-0-9 < /dev/urandom | head -c 8)
         echo "Assigning random password: $WEBPASSWORD"
     else
-        # ENV WEBPASSWORD is set an will be used
+        # ENV WEBPASSWORD_OVERRIDE is set and will be used
         echo "::: Assigning password defined by Environment Variable"
+        WEBPASSWORD="$WEBPASSWORD_OVERRIDE"
     fi
-
-    PASS="$WEBPASSWORD"
 
     # Explicitly turn off bash printing when working with secrets
     { set +x; } 2>/dev/null
 
-    if [[ "$PASS" == "" ]] ; then
+    if [[ "$WEBPASSWORD" == "" ]] ; then
         echo "" | pihole -a -p
     else
-        pihole -a -p "$PASS" "$PASS"
+        pihole -a -p "$WEBPASSWORD" "$WEBPASSWORD"
     fi
 
     # To avoid printing this if conditional in bash debug, turn off  debug above..

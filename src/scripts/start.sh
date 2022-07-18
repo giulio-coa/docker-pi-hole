@@ -4,6 +4,8 @@
 # else it will get overridden when we source bash_functions.sh
 # (which then sources basic-install.sh)
 [ -n "${QUERY_LOGGING}" ] && export QUERY_LOGGING_OVERRIDE="${QUERY_LOGGING}"
+# Same for WEBPASSWORD
+[ -n "${WEBPASSWORD}" ] && export WEBPASSWORD_OVERRIDE="${WEBPASSWORD}"
 
 # Legacy Env Vars preserved for backwards compatibility - convert them to FTLCONF_ equivalents
 [ -n "${ServerIP}" ] && echo "ServerIP is deprecated. Converting to FTLCONF_REPLY_ADDR4" && export "FTLCONF_REPLY_ADDR4"="$ServerIP"
